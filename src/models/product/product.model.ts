@@ -1,15 +1,33 @@
 import { Response } from 'express';
-import IProduct from '../Interfaces/IProduct';
+import IProduct from '../../Interfaces/IProduct';
 const Product = require('../admin.model').Product
 
-Product.getProducts = ( res: Response, cb: any ) => {
-  Product.findAll()
+Product.getProducts = ( res: Response, cb: Function ) => {
+  Product.findAll( { where: { statusItem: 0 } } )
   .then( (data: any) => cb( null, res, data, 200 ) )
   .catch( (error: any) => cb( error, res ) )
 }
 
-Product.saveProduct = ( data: IProduct, res: Response, cb: any ) => {
+Product.getProduct = ( id: number, res: Response, cb: Function ) => {
+  Product.findByPk( id )
+  .then( (data: any) => cb( null, res, data, 200 ) )
+  .catch( (error: any) => cb( error, res ) )
+}
+
+Product.saveProduct = ( data: IProduct, res: Response, cb: Function ) => {
   Product.create( data )
+  .then( (data: any) => cb( null, res, data, 201 ))
+  .catch( (error: any) => cb( error, res ))
+}
+
+Product.updateProduct = ( id: number, data: IProduct, res: Response, cb: Function ) => {
+  Product.update( data, { where: { id } } )
+  .then( (data: any) => cb( null, res, data, 201 ))
+  .catch( (error: any) => cb( error, res ))
+}
+
+Product.deleteProduct = ( id: number, res: Response, cb: Function ) => {
+  Product.update( { statusItem: 1 }, { where: { id } } )
   .then( (data: any) => cb( null, res, data, 201 ))
   .catch( (error: any) => cb( error, res ))
 }
