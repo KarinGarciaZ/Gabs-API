@@ -14,7 +14,7 @@ const Product = sequelize.define('product', {
 
 sequelize.sync()
 .then( () => console.log('DATABASE READY TO WORK'))
-.catch( error => console.log('ERROR CONNECTING TO THE DATABASE: --->', error))
+.catch( (error: any) => console.log('ERROR CONNECTING TO THE DATABASE: --->', error))
 
 
 module.exports = { Product };
