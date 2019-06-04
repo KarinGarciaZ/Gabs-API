@@ -1,35 +1,34 @@
 "use strict";
-
-  import { Application, Router } from 'express';
   const express = require('express')
-  const app: Application = express();
+  const app = express();
 
   const bodyParser = require('body-parser');
   const cors = require('cors');
   const env = require('dotenv');
+  const session = require('express-session');
   env.config();
 
-  app.use(bodyParser.json({limit: '50mb'}));
+  //this sets the db config to save sessions
+  let sessionStore = require('./src/db-config/mysql-session');
+  
+    app.use(session({
+      secret: 'session_cookie_secret',
+      store: sessionStore,
+      resave: false,
+      saveUninitialized: false
+    }));
+
+  app.use(bodyParser.json());
 
   //app.use( cors({ credentials: true, origin: true, methods: 'GET, POST, PUT, DELETE, OPTIONS', allowedHeaders: 'Content-Type' }) )
   app.use( cors({ credentials: true, origin: true}) )
 
   
   //this checks the enviroment of server
-  const adminRoutes: Router = require('./models/admin.routes');
+  const adminRoutes = require('./src/models/admin.routes');
   app.use(adminRoutes);
-
-
-  
-
-  declare var process : {
-    env: {
-      PORT: string,
-      HOST: string
-    }
-  }
-
-  app.listen( +process.env.PORT, process.env.HOST, () => {
+ 
+  app.listen( process.env.PORT, process.env.HOST, () => {
     console.log(`API ready to get requests...`);
     console.log('running on port ' , +process.env.PORT);
   });
