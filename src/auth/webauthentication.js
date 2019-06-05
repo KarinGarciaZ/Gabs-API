@@ -11,17 +11,6 @@ module.exports = ( req, res, next ) => {
 
   jwt.verify( token, process.env.SECRET_KEY, ( err, info ) => {
     if(err) return res.status(403).json('Token no valid.');
-    if( info.userId ) {
-      User.findByPk( info.userId )
-      .then( (value ) => {
-        if (!value.statusItem)
-          next();
-        else
-          return res.status(403).json('User deleted before.');
-      })
-      .catch( (error ) => res.status(403).json('User does not exists.') )
-    }
-    else
-      return res.status(403).json('UserId not stored in token.');
+    next()
   })  
 }
