@@ -23,6 +23,8 @@
   //app.use( cors({ credentials: true, origin: true, methods: 'GET, POST, PUT, DELETE, OPTIONS', allowedHeaders: 'Content-Type' }) )
   app.use( cors({ credentials: true, origin: true}) )
 
+  //seeds
+  app.use(require('./seeds'));
   
   //this checks the enviroment of server
   const adminRoutes = require('./src/models/admin.routes');
